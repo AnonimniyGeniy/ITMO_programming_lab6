@@ -1,11 +1,11 @@
 package commands;
 
 
-import managers.CommandReceiver;
 
 /**
  * Command to execute script from file
  */
+/*
 @CommandInfo(name = "execute_script", description = "Execute script from file", argsCount = 1, argumentTypes = {String.class}, requiredObjectType = Void.class)
 public class ExecuteScript extends AbstractCommand {
 
@@ -28,3 +28,4 @@ public class ExecuteScript extends AbstractCommand {
         return true;
     }
 }
+*/

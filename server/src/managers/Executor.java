@@ -1,10 +1,7 @@
 package managers;
 
 import commands.*;
-import exceptions.RecursionInScriptRecursion;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,19 +22,18 @@ public class Executor {
      * constructor for Executor
      *
      * @param collectionManager - CommandManager
-     *                       for managing commands
-     *                       and command history
-     * @param console        - console for user interaction
+     *                          for managing commands
+     *                          and command history
+     * @param console           - console for user interaction
      */
 
 
     public Executor(CollectionManager collectionManager, Console console) {
         this.console = console;
-        thi = ne(this.console, collectionManager);
         List<AbstractCommand> commands = new ArrayList<>();
         commands.add(new Info(this.console, collectionManager));
         commands.add(new Insert(this.console, collectionManager));
-        commands.add(new Exit(this.console, collectionManager));
+        //commands.add(new Exit(this.console, collectionManager));
         commands.add(new Save(this.console, collectionManager));
         commands.add(new Show(this.console, collectionManager));
         commands.add(new Remove(this.console, collectionManager));
@@ -48,7 +44,7 @@ public class Executor {
         commands.add(new GroupCountingByImpact(this.console, collectionManager));
         commands.add(new CountGreaterThanCar(this.console, collectionManager));
         commands.add(new PrintDescending(this.console, collectionManager));
-        commands.add(new ExecuteScript);
+        //commands.add(new ExecuteScript);
         var commandManager = new CommandManager(commands);
 
         commandManager.addCommand(new History(this.console, commandManager));
@@ -61,6 +57,7 @@ public class Executor {
     /**
      * method for executing commands in console mode
      */
+    /*
     public void consoleMode() {
         Scanner userScanner = CommandParser.getScanner();
         try {
@@ -82,6 +79,39 @@ public class Executor {
             console.println(e.getMessage());
         }
     }
+*/
+    /**
+     * method for executing commands in cli mode
+     *
+     * @param userCommand - command to execute
+     * @return status of execution
+     */
+    private Status executeCommand(CommandRequest userCommand){
+        Command command = commandManager.getCommands().get(userCommand.getCommandName());
+        try {
+            /*
+            if (userCommand[0].equals("exit")) {
+                return Status.EXIT;
+            } else if (userCommand[0].equals("execute_script")) {
+                if (!commandManager.getCommands().get("execute_script").execute(userCommand[1].trim().split(" ")))
+                    return Status.ERROR;
+                return scriptMode(userCommand[1]);
+            }
+            */
+
+            if (userCommand.getArguments().length == 0) {
+                command.execute((String[]) userCommand.getArguments(), null);
+                commandManager.addHistory(userCommand.getCommandName());
+            } else {
+                command.execute((String[]) userCommand.getArguments(), userCommand.getElement());
+                commandManager.addHistory(userCommand.getCommandName());
+            }
+            return Status.OK;
+        } catch (Exception e) {
+            console.println("Error: " + e.getMessage());
+            return Status.ERROR;
+        }
+    }
 
     /**
      * method for executing commands in script mode
@@ -90,6 +120,7 @@ public class Executor {
      * @return status of execution
      */
 
+    /*
     public Status scriptMode(String arg) {
         String[] command = new String[2];
         Status status;
@@ -142,43 +173,7 @@ public class Executor {
 
         return Status.ERROR;
     }
-
-    /**
-     * method for executing commands in cli mode
-     *
-     * @param userCommand - command to execute
-     * @return status of execution
-     */
-    private Status executeCommand(String[] userCommand) {
-        if (userCommand.length == 0) {
-            return Status.OK;
-        }
-        Command command = commandManager.getCommands().get(userCommand[0]);
-        if (command == null) {
-            console.println("Unknown command");
-            return Status.ERROR;
-        }
-        try {
-            if (userCommand[0].equals("exit")) {
-                return Status.EXIT;
-            } else if (userCommand[0].equals("execute_script")) {
-                if (!commandManager.getCommands().get("execute_script").execute(userCommand[1].trim().split(" ")))
-                    return Status.ERROR;
-                return scriptMode(userCommand[1]);
-            }
-            if (userCommand.length == 1) {
-                command.execute(new String[0]);
-                commandManager.addHistory(userCommand[0]);
-            } else {
-                command.execute(userCommand[1].trim().split(" "));
-                commandManager.addHistory(userCommand[0]);
-            }
-            return Status.OK;
-        } catch (Exception e) {
-            console.println("Error: " + e.getMessage());
-            return Status.ERROR;
-        }
-    }
+    */
 
 
     /**

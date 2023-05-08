@@ -1,10 +1,35 @@
 package main;
 
 
+import managers.CollectionManager;
+import managers.FileManager;
+import managers.UserConsole;
+import server.Server;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        var console = new UserConsole();
+        String path = null;
+        try {
+            path = System.getenv("FILENAME");
+        } catch (Exception e) {
+            System.out.println("Environment variable FILENAME is not set");
+            System.exit(1);
+        }
+        if (path == null) {
+            System.out.println("Environment variable FILENAME is not set");
+            System.exit(1);
+        }
+        FileManager fileManager = new FileManager(path, console);
+        CollectionManager collectionManager = new CollectionManager(console, fileManager);
+        try {
+            collectionManager.loadCollection();
+        } catch (Exception e) {
+            System.out.println("Error while loading collection from file");
+            System.exit(1);
+        }
+
+        Server server = new Server(collectionManager);
 
     }
 }
