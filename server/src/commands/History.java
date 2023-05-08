@@ -2,24 +2,22 @@ package commands;
 
 
 import managers.CommandManager;
-import managers.CommandReceiver;
 import managers.Console;
 /**
  * Command that shows last 13 commands (without their arguments)
  */
+@CommandInfo(name = "history", description = "Shows last 13 commands (without their arguments)")
 public class History extends AbstractCommand {
     private final CommandManager commandManager;
     private final Console console;
-    private final CommandReceiver commandReceiver;
 
     /**
      * Constructor for History
      */
-    public History(Console console, CommandManager commandManager, CommandReceiver commandReceiver) {
+    public History(Console console, CommandManager commandManager) {
         super("history", "Shows last 13 commands (without their arguments)");
         this.commandManager = commandManager;
         this.console = console;
-        this.commandReceiver = commandReceiver;
     }
 
 
@@ -43,7 +41,11 @@ public class History extends AbstractCommand {
      * Method for executing this command
      */
     @Override
-    public boolean execute(String[] args) {
-        return commandReceiver.history(args, commandManager);
+    public boolean execute(String[] args, Object obj) {
+        console.println("Last 13 commands:");
+        for (String command : commandManager.getCommandHistory()) {
+            console.println(command);
+        }
+        return true;
     }
 }

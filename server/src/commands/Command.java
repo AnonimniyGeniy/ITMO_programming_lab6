@@ -1,7 +1,5 @@
 package commands;
 
-import exceptions.WrongArgsAmount;
-
 /**
  * Default interface describing the behavior of command
  *
@@ -29,6 +27,8 @@ public interface Command {
      * @param args
      * @return Execution result
      */
-    boolean execute(String[] args);
+    //boolean execute(String[] args);
+
+    boolean execute(String[] args, Object object);
 
 }

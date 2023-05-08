@@ -2,26 +2,25 @@ package commands;
 
 
 import managers.CollectionManager;
-import managers.CommandReceiver;
 import managers.Console;
 /**
  * comamnd that saves collection to file
  */
+@CommandInfo(name = "save", description = "Save collection to file.")
 public class Save extends AbstractCommand {
     private final Console console;
     private final CollectionManager collectionManager;
-    private final CommandReceiver commandReceiver;
 
-    public Save(Console console, CollectionManager collectionManager, CommandReceiver commandReceiver) {
+    public Save(Console console, CollectionManager collectionManager) {
         super("save", "Save collection to file.");
         this.console = console;
         this.collectionManager = collectionManager;
-        this.commandReceiver = commandReceiver;
     }
 
     @Override
-    public boolean execute(String[] args) {
-        return commandReceiver.save(args);
+    public boolean execute(String[] args, Object obj) {
+        collectionManager.saveCollection();
+        return true;
     }
 
 }

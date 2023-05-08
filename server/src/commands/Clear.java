@@ -4,24 +4,34 @@ import managers.CollectionManager;
 import managers.CommandReceiver;
 import managers.Console;
 
+import java.util.TreeMap;
+
 /**
  * command for clearing collection
  */
+@CommandInfo(name = "clear", description = "clear collection", argsCount = 0, argumentTypes = {}, requiredObjectType = Void.class)
 public class Clear extends AbstractCommand {
     private final CollectionManager collectionManager;
     private final Console console;
-    private final CommandReceiver commandReceiver;
 
-    public Clear(Console console, CollectionManager collectionManager, CommandReceiver commandReceiver) {
+    public Clear(Console console, CollectionManager collectionManager) {
         super("clear", "clear collection");
         this.collectionManager = collectionManager;
         this.console = console;
-        this.commandReceiver = commandReceiver;
     }
 
 
+    /**
+     * Execute command clear
+     *
+     * @param args
+     * @param object
+     * @return Execution result
+     */
     @Override
-    public boolean execute(String[] args) {
-        return commandReceiver.Clear();
+    public boolean execute(String[] args, Object object) {
+        collectionManager.setHumanBeingCollection(new TreeMap<>());
+        console.println("Collection was cleared");
+        return true;
     }
 }

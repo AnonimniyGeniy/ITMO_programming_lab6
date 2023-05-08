@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 public @interface CommandInfo {
     String name();
     String description();
-    int argsCount();
-    Class<?>[] argumentTypes();
+    int argsCount() default 0;
+    Class<?>[] argumentTypes() default {};
     Class<?> requiredObjectType() default Void.class;
 }
