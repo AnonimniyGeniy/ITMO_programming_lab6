@@ -11,7 +11,6 @@ import java.util.TreeMap;
  */
 public class CollectionManager {
 
-    private final Console console;
     private final LocalDateTime creationTime;
     private final FileManager fileManager;
     /**
@@ -25,8 +24,7 @@ public class CollectionManager {
     };
     private TreeMap<Integer, HumanBeing> humanBeingCollection;
 
-    public CollectionManager(Console console, FileManager fileManager) {
-        this.console = console;
+    public CollectionManager(FileManager fileManager) {
         this.fileManager = fileManager;
         humanBeingCollection = new TreeMap(humanBeingComparator);
         creationTime = LocalDateTime.now();

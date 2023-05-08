@@ -1,28 +1,24 @@
 package commands;
 
-import managers.Console;
-
 /**
  * shows help for available commands
  */
 @CommandInfo(name = "help", description = "shows help for available commands")
 public class Help extends AbstractCommand {
     private final AbstractCommand[] commands;
-    private final Console console;
 
-    public Help(Console console, AbstractCommand[] commands) {
+    public Help(AbstractCommand[] commands) {
         super("help", "shows help for available commands");
         this.commands = commands;
-        this.console = console;
     }
 
     @Override
-    public boolean execute(String[] args, Object obj) {
+    public CommandResponce execute(String[] args, Object obj) {
+        StringBuilder stringBuilder = new StringBuilder();
         for (AbstractCommand command : commands) {
-            console.println(command.getName() + " - " + command.describe());
+            stringBuilder.append(command.getName()).append(" - ").append(command.describe()).append("\n");
         }
-        console.println("help - " + "shows help for available commands");
-        return true;
-
+        stringBuilder.append("help - ").append("shows help for available commands");
+        return new CommandResponce(stringBuilder.toString(), null);
     }
 }

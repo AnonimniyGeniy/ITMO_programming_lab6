@@ -3,12 +3,10 @@ package main;
 
 import managers.CollectionManager;
 import managers.FileManager;
-import managers.UserConsole;
 import server.Server;
 
 public class Main {
     public static void main(String[] args) {
-        var console = new UserConsole();
         String path = null;
         try {
             path = System.getenv("FILENAME");
@@ -20,8 +18,8 @@ public class Main {
             System.out.println("Environment variable FILENAME is not set");
             System.exit(1);
         }
-        FileManager fileManager = new FileManager(path, console);
-        CollectionManager collectionManager = new CollectionManager(console, fileManager);
+        FileManager fileManager = new FileManager(path);
+        CollectionManager collectionManager = new CollectionManager(fileManager);
         try {
             collectionManager.loadCollection();
         } catch (Exception e) {
@@ -30,6 +28,9 @@ public class Main {
         }
 
         Server server = new Server(collectionManager);
+        while (true) {
+            server.run();
+        }
 
     }
 }

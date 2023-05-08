@@ -16,19 +16,17 @@ import java.util.TreeMap;
  */
 public class FileManager {
     private final String path;
-    private final Console console;
     Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .create();
 
-    public FileManager(String path, Console console) {
+    public FileManager(String path) {
         //if file does not exist, create it using File
         if (!new File(path).exists()) {
             //path = "../" + path;
         }
 
         this.path = path;
-        this.console = console;
     }
 
 
@@ -40,9 +38,9 @@ public class FileManager {
     public void writeCollection(TreeMap<Integer, HumanBeing> collection) {
         try (PrintWriter writer = new PrintWriter(new File(path))) {
             writer.println(gson.toJson(collection));
-            console.println("Collection saved to file");
+            System.out.println("Collection saved to file");
         } catch (IOException e) {
-            console.println("Error during opening file: " + e.getMessage());
+            System.out.println("Error during opening file: " + e.getMessage());
         }
     }
 
@@ -73,7 +71,7 @@ public class FileManager {
 
                 TreeMap<Integer, HumanBeing> collection = gson.fromJson(json.toString(), CollectionType);
 
-                console.println("Collection loaded from file");
+                System.out.println("Collection loaded from file");
 
                 /**
                  * if every element of collection is not valid, return empty collection and print error
@@ -81,7 +79,7 @@ public class FileManager {
                 
                 for (var human : collection.values()) {
                     if (!human.validate()) {
-                        console.println("Collection is not valid");
+                        System.out.println("Collection is not valid");
                         return new TreeMap<>();
                     }
                 }
@@ -89,17 +87,17 @@ public class FileManager {
                 return collection;
 
             } catch (FileNotFoundException e) {
-                console.println("File not found");
+                System.out.println("File not found");
             } catch (NoSuchElementException exception) {
-                console.println("File is empty");
+                System.out.println("File is empty");
             } catch (JsonParseException exception) {
-                console.println("File is corrupted");
+                System.out.println("File is corrupted");
             } catch (IllegalStateException | IOException exception) {
-                console.println("Error during reading file: " + exception.getMessage());
+                System.out.println("Error during reading file: " + exception.getMessage());
                 System.exit(0);
             }
         } else {
-            console.println("Path is not found");
+            System.out.println("Path is not found");
         }
 
         return new TreeMap<>();

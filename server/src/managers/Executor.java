@@ -4,59 +4,95 @@ import commands.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 /**
  * Class that controls the command input mode and manages Scanner and handling whole execution.
  * (receiver)
  */
 public class Executor {
-
     private final List<String> recursionStack = new ArrayList<>();
     private final CommandManager commandManager;
-    private final Console console;
-
-
     /**
      * constructor for Executor
      *
      * @param collectionManager - CommandManager
      *                          for managing commands
      *                          and command history
-     * @param console           - console for user interaction
      */
-
-
-    public Executor(CollectionManager collectionManager, Console console) {
-        this.console = console;
+    public Executor(CollectionManager collectionManager) {
         List<AbstractCommand> commands = new ArrayList<>();
-        commands.add(new Info(this.console, collectionManager));
-        commands.add(new Insert(this.console, collectionManager));
-        //commands.add(new Exit(this.console, collectionManager));
-        commands.add(new Save(this.console, collectionManager));
-        commands.add(new Show(this.console, collectionManager));
-        commands.add(new Remove(this.console, collectionManager));
-        commands.add(new Update(this.console, collectionManager));
-        commands.add(new Clear(this.console, collectionManager));
-        commands.add(new RemoveGreater(this.console, collectionManager));
-        commands.add(new ReplaceIfLower(this.console, collectionManager));
-        commands.add(new GroupCountingByImpact(this.console, collectionManager));
-        commands.add(new CountGreaterThanCar(this.console, collectionManager));
-        commands.add(new PrintDescending(this.console, collectionManager));
+        commands.add(new Info(collectionManager));
+        commands.add(new Insert(collectionManager));
+        //commands.add(new Exit(collectionManager));
+        commands.add(new Save(collectionManager));
+        commands.add(new Show(collectionManager));
+        commands.add(new Remove(collectionManager));
+        commands.add(new Update(collectionManager));
+        commands.add(new Clear(collectionManager));
+        commands.add(new RemoveGreater(collectionManager));
+        commands.add(new ReplaceIfLower(collectionManager));
+        commands.add(new GroupCountingByImpact(collectionManager));
+        commands.add(new CountGreaterThanCar(collectionManager));
+        commands.add(new PrintDescending(collectionManager));
         //commands.add(new ExecuteScript);
         var commandManager = new CommandManager(commands);
-
-        commandManager.addCommand(new History(this.console, commandManager));
-        commandManager.addCommand(new Help(this.console, commandManager.getCommandsArray()));
+        commandManager.addCommand(new History(commandManager));
+        commandManager.addCommand(new Help(commandManager.getCommandsArray()));
         this.commandManager = commandManager;
-
-
     }
-
     /**
-     * method for executing commands in console mode
+     * method for executing commands in cli mode
+     *
+     * @param userCommand - command to execute
+     * @return status of execution
      */
+    public CommandResponce executeCommand(CommandRequest userCommand) {
+        Command command = commandManager.getCommands().get(userCommand.getCommandName());
+        CommandResponce response = new CommandResponce("OK", null);
+        try {
+            if (userCommand.getArguments().length == 0) {
+                response = command.execute((String[]) userCommand.getArguments(), null);
+                commandManager.addHistory(userCommand.getCommandName());
+            } else {
+                response = command.execute((String[]) userCommand.getArguments(), userCommand.getElement());
+                commandManager.addHistory(userCommand.getCommandName());
+            }
+            return response;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return response;
+    }
+//    public Status executeCommand(CommandRequest userCommand){
+//        Command command = commandManager.getCommands().get(userCommand.getCommandName());
+//        try {
+//            /*
+//            if (userCommand[0].equals("exit")) {
+//                return Status.EXIT;
+//            } else if (userCommand[0].equals("execute_script")) {
+//                if (!commandManager.getCommands().get("execute_script").execute(userCommand[1].trim().split(" ")))
+//                    return Status.ERROR;
+//                return scriptMode(userCommand[1]);
+//            }
+//            */
+//
+//            if (userCommand.getArguments().length == 0) {
+//                command.execute((String[]) userCommand.getArguments(), null);
+//                commandManager.addHistory(userCommand.getCommandName());
+//            } else {
+//                command.execute((String[]) userCommand.getArguments(), userCommand.getElement());
+//                commandManager.addHistory(userCommand.getCommandName());
+//            }
+//            return Status.OK;
+//        } catch (Exception e) {
+//            console.println("Error: " + e.getMessage());
+//            return Status.ERROR;
+//        }
+//    }
+
+/**
+ * method for executing commands in console mode
+ */
     /*
     public void consoleMode() {
         Scanner userScanner = CommandParser.getScanner();
@@ -80,39 +116,6 @@ public class Executor {
         }
     }
 */
-    /**
-     * method for executing commands in cli mode
-     *
-     * @param userCommand - command to execute
-     * @return status of execution
-     */
-    private Status executeCommand(CommandRequest userCommand){
-        Command command = commandManager.getCommands().get(userCommand.getCommandName());
-        try {
-            /*
-            if (userCommand[0].equals("exit")) {
-                return Status.EXIT;
-            } else if (userCommand[0].equals("execute_script")) {
-                if (!commandManager.getCommands().get("execute_script").execute(userCommand[1].trim().split(" ")))
-                    return Status.ERROR;
-                return scriptMode(userCommand[1]);
-            }
-            */
-
-            if (userCommand.getArguments().length == 0) {
-                command.execute((String[]) userCommand.getArguments(), null);
-                commandManager.addHistory(userCommand.getCommandName());
-            } else {
-                command.execute((String[]) userCommand.getArguments(), userCommand.getElement());
-                commandManager.addHistory(userCommand.getCommandName());
-            }
-            return Status.OK;
-        } catch (Exception e) {
-            console.println("Error: " + e.getMessage());
-            return Status.ERROR;
-        }
-    }
-
     /**
      * method for executing commands in script mode
      *

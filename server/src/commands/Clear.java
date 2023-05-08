@@ -1,7 +1,6 @@
 package commands;
 
 import managers.CollectionManager;
-import managers.Console;
 
 import java.util.TreeMap;
 
@@ -11,12 +10,10 @@ import java.util.TreeMap;
 @CommandInfo(name = "clear", description = "clear collection", argsCount = 0, argumentTypes = {}, requiredObjectType = Void.class)
 public class Clear extends AbstractCommand {
     private final CollectionManager collectionManager;
-    private final Console console;
 
-    public Clear(Console console, CollectionManager collectionManager) {
+    public Clear(CollectionManager collectionManager) {
         super("clear", "clear collection");
         this.collectionManager = collectionManager;
-        this.console = console;
     }
 
 
@@ -28,9 +25,8 @@ public class Clear extends AbstractCommand {
      * @return Execution result
      */
     @Override
-    public boolean execute(String[] args, Object object) {
+    public CommandResponce execute(String[] args, Object object) {
         collectionManager.setHumanBeingCollection(new TreeMap<>());
-        console.println("Collection was cleared");
-        return true;
+        return new CommandResponce("Collection was cleared", null);
     }
 }

@@ -6,7 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.ServerSocket;
-
+;
+import commands.CommandRequest;
+import commands.CommandResponce;
 import managers.CollectionManager;
 import managers.Executor;
 
@@ -39,7 +41,7 @@ public class Server {
         }
         stream = System.in;
         this.collectionManager = collectionManager;
-        this.executor = new Executor(collectionManager, );
+        this.executor = new Executor(collectionManager);
 
 
     }
@@ -48,8 +50,17 @@ public class Server {
     public void run(){
         try{
             connect();
-            while
-
+            CommandRequest commandRequest = null;
+            while (commandRequest == null){
+                try {
+                    commandRequest = (CommandRequest) readObject();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            CommandResponce result = executor.executeCommand(commandRequest);
+            sendObject(result);
+            executor.executeCommand(new CommandRequest("save", new Object[]{}, null));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
