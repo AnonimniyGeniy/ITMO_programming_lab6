@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+group = 'org.lab6'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets.main.java.srcDirs = ['src']
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation project(':shared')
+}
+
+application {
+    mainClass = 'main.Main'
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "main.Main",
+                "Class-Path": configurations.compileClasspath.collect { it.getName() }.join(' ')
+        )
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

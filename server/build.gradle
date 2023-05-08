@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+apply plugin : 'java'
+apply plugin : 'application'
+group = 'org.lab6'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets.main.java.srcDirs = ['src']
+
+/*
+configurations {
+    all {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+}*/
+
+application {
+    mainClass = 'main.Main'
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation project(':shared')
+}
+
+
+jar {
+    manifest {
+        include ":shared"
+
+        attributes ("Main-Class": "main.Main",
+                    "Class-Path": configurations.compileClasspath.collect { it.getName() }.join(' '))
+
+    }
+}
