@@ -8,6 +8,7 @@ import managers.Console;
 /**
  * command for removing element from collection by id
  */
+@CommandInfo(name = "remove", description = "remove element from collection by id", argsCount = 1, argumentTypes = {int.class}, requiredObjectType = Void.class)
 public class Remove extends AbstractCommand {
     private final CollectionManager collectionManager;
     private final Console console;
