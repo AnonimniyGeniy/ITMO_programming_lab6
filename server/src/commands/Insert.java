@@ -27,17 +27,17 @@ public class Insert extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         //console.println(args[0] + args[1]);
         int key = Integer.parseInt(args[0]);
         if (collectionManager.getHumanBeingCollection().containsKey(key)) {
-            return new CommandResponce("Element with this key already exists.", null);
+            return new CommandResponse("Element with this key already exists.", null);
         }
         HumanBeing humanBeing = null;
         humanBeing = (HumanBeing) obj;
         humanBeing.setId(key);
         collectionManager.insert(key, humanBeing);
-        return new CommandResponce("Element added successfully.", null);
+        return new CommandResponse("Element added successfully.", null);
 
     }
 

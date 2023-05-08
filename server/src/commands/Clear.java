@@ -25,8 +25,8 @@ public class Clear extends AbstractCommand {
      * @return Execution result
      */
     @Override
-    public CommandResponce execute(String[] args, Object object) {
+    public CommandResponse execute(String[] args, Object object) {
         collectionManager.setHumanBeingCollection(new TreeMap<>());
-        return new CommandResponce("Collection was cleared", null);
+        return new CommandResponse("Collection was cleared", null);
     }
 }

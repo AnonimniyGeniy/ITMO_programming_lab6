@@ -16,8 +16,8 @@ public class Show extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
-        return new CommandResponce("Showed all elements of collection", collectionManager.getArray());
+    public CommandResponse execute(String[] args, Object obj) {
+        return new CommandResponse("Showed all elements of collection", collectionManager.getArray());
     }
 
 }

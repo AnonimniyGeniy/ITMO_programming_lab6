@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.ServerSocket;
 ;
 import commands.CommandRequest;
-import commands.CommandResponce;
+import commands.CommandResponse;
 import managers.CollectionManager;
 import managers.Executor;
 
@@ -58,7 +58,7 @@ public class Server {
                     e.printStackTrace();
                 }
             }
-            CommandResponce result = executor.executeCommand(commandRequest);
+            CommandResponse result = executor.executeCommand(commandRequest);
             sendObject(result);
             executor.executeCommand(new CommandRequest("save", new Object[]{}, null));
         } catch (Exception e) {

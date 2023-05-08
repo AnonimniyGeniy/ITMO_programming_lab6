@@ -21,7 +21,7 @@ public class GroupCountingByImpact extends AbstractCommand {
 
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         HumanBeing[] elements = collectionManager.getArray();
         int[] impactSpeed = new int[elements.length];
         for (int i = 0; i < elements.length; i++) {
@@ -41,7 +41,7 @@ public class GroupCountingByImpact extends AbstractCommand {
         for (Map.Entry<Integer, Integer> entry : counter.entrySet()) {
             objects[entry.getKey()] = "Impact speed: " + entry.getKey() + " - " + entry.getValue() + " elements";
         }
-        return new CommandResponce("Grouped counting by impact speed entries", objects);
+        return new CommandResponse("Grouped counting by impact speed entries", objects);
 
 
     }

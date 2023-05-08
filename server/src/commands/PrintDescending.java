@@ -21,14 +21,14 @@ public class PrintDescending extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         try {
             ArrayList<HumanBeing> elements = new ArrayList<>(List.of(collectionManager.getArray()));
             elements.sort(Comparator.reverseOrder());
-            return new CommandResponce("Elements in descending order", elements.toArray());
+            return new CommandResponse("Elements in descending order", elements.toArray());
 
         } catch (Exception e) {
-            return new CommandResponce("Something went wrong", null);
+            return new CommandResponse("Something went wrong", null);
         }
     }
 

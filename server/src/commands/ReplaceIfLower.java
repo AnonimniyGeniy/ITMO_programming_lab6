@@ -18,19 +18,19 @@ public class ReplaceIfLower extends AbstractCommand {
 
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         //check if key exists
         int key = Integer.parseInt(args[0]);
         if (!collectionManager.getHumanBeingCollection().containsKey(key)) {
-            return new CommandResponce("Key doesn't exist.", null);
+            return new CommandResponse("Key doesn't exist.", null);
         }
         HumanBeing humanBeing = (HumanBeing) obj;
         humanBeing.setId(key);
         if (collectionManager.getHumanBeingCollection().get(key).compareTo(humanBeing) > 0) {
             collectionManager.insert(key, humanBeing);
-            return new CommandResponce("Element changed successfully.", null);
+            return new CommandResponse("Element changed successfully.", null);
         } else {
-            return new CommandResponce("Element is not lower.", null);
+            return new CommandResponse("Element is not lower.", null);
         }
     }
 }

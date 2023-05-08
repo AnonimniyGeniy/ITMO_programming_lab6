@@ -46,9 +46,9 @@ public class Executor {
      * @param userCommand - command to execute
      * @return status of execution
      */
-    public CommandResponce executeCommand(CommandRequest userCommand) {
+    public CommandResponse executeCommand(CommandRequest userCommand) {
         Command command = commandManager.getCommands().get(userCommand.getCommandName());
-        CommandResponce response = new CommandResponce("OK", null);
+        CommandResponse response = new CommandResponse("OK", null);
         try {
             if (userCommand.getArguments().length == 0) {
                 response = command.execute((String[]) userCommand.getArguments(), null);

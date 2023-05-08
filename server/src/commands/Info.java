@@ -27,12 +27,12 @@ public class Info extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         LocalDateTime initTime = collectionManager.getCreationTime();
         String message = "Collection info:\n" +
                 "Collection type: " + collectionManager.getHumanBeingCollection().getClass().getName() + "\n" +
                 "Collection size: " + collectionManager.getHumanBeingCollection().size() + "\n" +
                 "Initialization time: " + initTime;
-        return new CommandResponce(message, null);
+        return new CommandResponse(message, null);
     }
 }

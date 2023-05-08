@@ -16,8 +16,8 @@ public class RemoveGreater extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         collectionManager.removeGreater((HumanBeing) obj);
-        return new CommandResponce("All greater elements was successfully removed", null);
+        return new CommandResponse("All greater elements was successfully removed", null);
     }
 }

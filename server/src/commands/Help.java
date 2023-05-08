@@ -13,12 +13,12 @@ public class Help extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         StringBuilder stringBuilder = new StringBuilder();
         for (AbstractCommand command : commands) {
             stringBuilder.append(command.getName()).append(" - ").append(command.describe()).append("\n");
         }
         stringBuilder.append("help - ").append("shows help for available commands");
-        return new CommandResponce(stringBuilder.toString(), null);
+        return new CommandResponse(stringBuilder.toString(), null);
     }
 }

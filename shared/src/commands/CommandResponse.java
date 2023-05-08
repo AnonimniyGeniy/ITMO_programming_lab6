@@ -2,11 +2,11 @@ package commands;
 
 import java.io.Serializable;
 
-public class CommandResponce implements Serializable {
+public class CommandResponse implements Serializable {
     private final String message;
     private final Object[] object;
 
-    public CommandResponce(String message, Object[] object) {
+    public CommandResponse(String message, Object[] object) {
         this.message = message;
         this.object = object;
     }

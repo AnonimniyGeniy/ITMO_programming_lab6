@@ -38,12 +38,12 @@ public class History extends AbstractCommand {
      * Method for executing this command
      */
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         StringBuilder commands = new StringBuilder();
         String message = "Last 13 commands:";
         for (String command : commandManager.getCommandHistory()) {
             commands.append(command).append("\n");
         }
-        return new CommandResponce(message, new Object[]{commands.toString()});
+        return new CommandResponse(message, new Object[]{commands.toString()});
     }
 }

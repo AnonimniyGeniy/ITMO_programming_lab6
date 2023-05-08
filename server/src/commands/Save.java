@@ -15,9 +15,9 @@ public class Save extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         collectionManager.saveCollection();
-        return new CommandResponce("Collection saved", null);
+        return new CommandResponse("Collection saved", null);
     }
 
 }

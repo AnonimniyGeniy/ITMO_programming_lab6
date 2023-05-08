@@ -18,15 +18,15 @@ public class Update extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         int key = Integer.parseInt(args[0]);
         if (!collectionManager.getHumanBeingCollection().containsKey(key)) {
-            return new CommandResponce("Element with this key doesn't exist.", null);
+            return new CommandResponse("Element with this key doesn't exist.", null);
         }
         HumanBeing humanBeing = (HumanBeing) obj;
         humanBeing.setId(key);
         collectionManager.removeById(key);
         collectionManager.insert(key, humanBeing);
-        return new CommandResponce("Element updated successfully.", null);
+        return new CommandResponse("Element updated successfully.", null);
     }
 }

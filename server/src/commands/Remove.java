@@ -16,13 +16,13 @@ public class Remove extends AbstractCommand {
     }
 
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
 
         int id = Integer.parseInt(args[0]);
         if (collectionManager.removeById(id)) {
-            return new CommandResponce("Element with id " + id + " was removed", null);
+            return new CommandResponse("Element with id " + id + " was removed", null);
         } else {
-            return new CommandResponce("Element with id " + id + " wasn't found", null);
+            return new CommandResponse("Element with id " + id + " wasn't found", null);
         }
 
     }

@@ -24,13 +24,13 @@ public class CountGreaterThanCar extends AbstractCommand {
      * @param args arguments for command
      */
     @Override
-    public CommandResponce execute(String[] args, Object obj) {
+    public CommandResponse execute(String[] args, Object obj) {
         int count = 0;
         Car car = (Car) obj;
         for (HumanBeing humanBeing : collectionManager.getHumanBeingCollection().values()) {
             if (humanBeing.getCar().compareTo(car) > 0) count++;
         }
-        return new CommandResponce("There are " + count + " elements whose car field value is greater than the specified one", null);
+        return new CommandResponse("There are " + count + " elements whose car field value is greater than the specified one", null);
     }
 
 
