@@ -7,7 +7,6 @@ import collections.WeaponType;
 import exceptions.EmptyFieldException;
 import exceptions.IncorrectScriptInputException;
 import exceptions.InvalidObjectException;
-import managers.CollectionManager;
 import managers.CommandParser;
 import managers.Console;
 
@@ -16,11 +15,9 @@ import managers.Console;
  */
 public class HumanBeingAsker extends Asker {
     private final Console console;
-    private final CollectionManager collectionManager;
 
-    public HumanBeingAsker(Console console, CollectionManager collectionManager) {
+    public HumanBeingAsker(Console console) {
         this.console = console;
-        this.collectionManager = collectionManager;
     }
 
     public HumanBeing build() throws IncorrectScriptInputException, EmptyFieldException, InvalidObjectException {

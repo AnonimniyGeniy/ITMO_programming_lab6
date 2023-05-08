@@ -3,6 +3,7 @@ package commands;
 
 import managers.CollectionManager;
 import managers.CommandReceiver;
+import managers.Console;
 
 /**
  * command for removing element from collection by id

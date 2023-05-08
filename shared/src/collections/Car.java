@@ -2,11 +2,13 @@ package collections;
 
 import other.Validatable;
 
+import java.io.Serializable;
+
 
 /**
  * Class for Car
  */
-public class Car implements Validatable {
+public class Car implements Validatable, Serializable {
     private final String name; //Поле не может быть null
 
     public Car(String name) {

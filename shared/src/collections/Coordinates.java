@@ -1,12 +1,12 @@
 package collections;
 
 import other.Validatable;
-
+import java.io.Serializable;
 
 /**
  * Class for Coordinates
  */
-public class Coordinates implements Validatable {
+public class Coordinates implements Validatable, Serializable{
     private final double x; //Максимальное значение поля: 180
     private final int y;
 

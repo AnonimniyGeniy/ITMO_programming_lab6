@@ -3,6 +3,7 @@ package commands;
 
 import managers.CollectionManager;
 import managers.CommandReceiver;
+import managers.Console;
 
 /**
  * prints all elements in descending order

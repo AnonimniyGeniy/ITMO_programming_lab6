@@ -3,6 +3,7 @@ package commands;
 
 import managers.CollectionManager;
 import managers.CommandReceiver;
+import managers.Console;
 
 /**
  * show all elements whose car field value is greater than the specified one

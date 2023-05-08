@@ -2,7 +2,7 @@ package commands;
 
 import managers.CollectionManager;
 import managers.CommandReceiver;
-
+import managers.Console;
 
 /**
  * command for replacing value by key if new value is lower

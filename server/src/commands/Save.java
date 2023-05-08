@@ -3,7 +3,7 @@ package commands;
 
 import managers.CollectionManager;
 import managers.CommandReceiver;
-
+import managers.Console;
 /**
  * comamnd that saves collection to file
  */

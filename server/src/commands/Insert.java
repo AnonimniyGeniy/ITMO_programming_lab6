@@ -2,6 +2,7 @@ package commands;
 
 import managers.CollectionManager;
 import managers.CommandReceiver;
+import managers.Console;
 
 /**
  * Command that inserts element in the collection

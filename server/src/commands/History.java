@@ -3,7 +3,7 @@ package commands;
 
 import managers.CommandManager;
 import managers.CommandReceiver;
-
+import managers.Console;
 /**
  * Command that shows last 13 commands (without their arguments)
  */

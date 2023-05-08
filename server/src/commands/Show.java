@@ -2,7 +2,7 @@ package commands;
 
 import managers.CollectionManager;
 import managers.CommandReceiver;
-
+import managers.Console;
 
 /**
  * Show command

@@ -1,10 +1,12 @@
 package collections;
 
 
+import java.io.Serializable;
+
 /**
  * Enum for WeaponType
  */
-public enum WeaponType {
+public enum WeaponType implements Serializable {
     HAMMER,
     AXE,
     SHOTGUN,
