@@ -1,23 +1,29 @@
 package managers;
 
-import collections.Deserializer;
-import collections.Serializer;
 import commands.CommandDescription;
 import commands.CommandRequest;
 import commands.CommandResponse;
+import interfaces.ClientInterface;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public class Client {
+public class Client implements ClientInterface {
     private String host;
     private int port;
+    private Socket socket;
     private SocketChannel client;
     private Serializer serializer;
     private Deserializer deserializer;
     private ByteBuffer buffer;
+    private OutputStream outputStream;
+    private InputStream inputStream;
+
     private CommandDescription[] commandDescriptions;
 
     public Client(String host, int port) {
@@ -25,74 +31,65 @@ public class Client {
         this.port = port;
         serializer = new Serializer();
         deserializer = new Deserializer();
+
         this.buffer = ByteBuffer.allocate(100000);
-        try {
-            connect();
-            this.commandDescriptions = (CommandDescription[]) receiveObject();
-        } catch (Exception e) {
-            System.out.println("Error while connecting to server");
-        }
-
     }
 
-    public CommandResponse run(CommandRequest obj) {
-        CommandResponse response = null;
+    public void connect() throws IOException {
         try {
-            connect();
-            //try receiving command descriptions
-            try {
-                this.commandDescriptions = (CommandDescription[]) receiveObject();
-            } catch (Exception e) {
-                System.out.println("Error while receiving command descriptions");
+
+            client = SocketChannel.open();
+            client.configureBlocking(false);
+            client.connect(new InetSocketAddress(host, port));
+            while (!client.finishConnect()) {
+                continue;
+                // Дополнительные действия или ожидание
             }
-            sendObject(obj);
-            response = (CommandResponse) receiveObject();
-            close();
-        } catch (Exception e) {
-            return new CommandResponse("Error while running command", null);
-        }
-        return response;
-    }
 
-    private void connect() throws IOException {
-        client = SocketChannel.open(new InetSocketAddress(host, port));
-        client.configureBlocking(false);
 
-    }
+            //socket = new Socket(host, port);
 
-    private void sendObject(Object obj) throws IOException {
-        try {
-            client.write(serializer.serialize(obj));
-        } catch (Exception e) {
-            System.out.println("Error while sending object");
+            //outputStream = socket.getOutputStream();
+            //inputStream = socket.getInputStream();
+            //System.out.println("Connected to server");
+
+        } catch (IOException e) {
+            System.out.println("Error while connecting to server");
+            e.printStackTrace();
         }
     }
 
-    private Object receiveObject() throws IOException {
+    @Override
+    public CommandResponse run(CommandRequest obj) {
+        return null;
+    }
+
+    public Object readObject() throws ClassNotFoundException, IOException {
         while (true) {
             try {
                 client.read(buffer);
-                Object o = deserializer.deserialize(buffer);
+                Object obj = deserializer.deserialize(buffer);
                 buffer = ByteBuffer.allocate(100000);
-                return o;
+                return obj;
             } catch (Exception e) {
-                System.out.println("Error while receiving object");
-                return null;
+                System.out.println("Error while reading object");
+                e.printStackTrace();
             }
+            return null;
         }
     }
 
-    public CommandDescription[] getCommandDescriptions() {
-        return commandDescriptions;
+    public void sendObject(Object obj) throws IOException {
+        try {
+            client.write(serializer.serialize(obj));
+        } catch (IOException e) {
+            System.out.println("Error while sending object");
+            e.printStackTrace();
+        }
     }
 
-    private void close() throws IOException {
+    public void close() throws IOException {
+        //socket.close();
         client.close();
     }
-
-    public void receiveCommandDescriptions() throws IOException {
-        connect();
-        this.commandDescriptions = (CommandDescription[]) receiveObject();
-    }
-
 }

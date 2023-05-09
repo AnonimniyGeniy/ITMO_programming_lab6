@@ -1,27 +1,24 @@
 package server;
 
-import java.io.*;
-import java.net.Socket;
-import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import commands.*;
 import managers.CollectionManager;
 import managers.Executor;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Class that manages connections with clients
  */
 public class Server {
+    private final CollectionManager collectionManager;
+    private final Executor executor;
     private int port;
     private Socket socket;
     private ServerSocket server;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private InputStream stream;
-    private final CollectionManager collectionManager;
-    private final Executor executor;
 
     public Server(CollectionManager collectionManager) {
         this.port = 2222;
@@ -39,44 +36,32 @@ public class Server {
         this.collectionManager = collectionManager;
         this.executor = new Executor(collectionManager);
     }
-    public void run(){
-        try{
+
+    public void run() {
+        try {
             connect();
-            //creating array of command-descriptions by using factory for each command in commands array from executor
-            AbstractCommand[] commands = executor.getCommandsArray();
-            CommandDescription[] commandDescriptions = new CommandDescription[commands.length];
-            for (int i = 0; i < commands.length; i++) {
-                commandDescriptions[i] = CommandDescriptionFactory.createCommandDescription(commands[i].getClass());
-            }
-            System.out.println("Sending command descriptions");
-            sendObject(commandDescriptions);
-            CommandRequest commandRequest = null;
-            while (commandRequest == null){
-                try {
-                    commandRequest = (CommandRequest) readObject();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            CommandResponse result = executor.executeCommand(commandRequest);
-            sendObject(result);
-            executor.executeCommand(new CommandRequest("save", new String[]{}, null));
-        } catch (Exception e) {
-            System.out.println("Error while running server");
-        }
-//        try {
-//            if (stream.available() > 0){
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-//                if (reader.readLine().equals("save")){
-//                    executor.executeCommand(new CommandRequest("save", new String[]{}, null));
-//                    System.out.println("Collection saved");
+            sendObject(new String("Some message"));
+            //server.close();
+            //Object obj = readObject();
+//            String s = (String) obj;
+//            System.out.println(s);
+//            CommandRequest commandRequest = null;
+//
+//            while (commandRequest == null){
+//                try {
+//                    commandRequest = (CommandRequest) readObject();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
 //                }
 //            }
-//        }catch (Exception e){
-//            System.out.println("Error while saving collection");
-//        }
+//            CommandResponse result = executor.executeCommand(commandRequest);
+//            sendObject(result);
+//            executor.executeCommand(new CommandRequest("save", new String[]{}, null));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Error while running server");
+        }
     }
-
 
     private void connect() throws Exception {
         socket = server.accept();
@@ -89,8 +74,12 @@ public class Server {
     }
 
     private void sendObject(Object object) throws IOException {
+
         outputStream = new ObjectOutputStream(socket.getOutputStream());
         outputStream.writeObject(object);
         outputStream.flush();
+        //OutputStream os = socket.getOutputStream();
+        //os.write(object);
     }
+
 }

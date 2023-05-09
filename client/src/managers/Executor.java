@@ -69,14 +69,7 @@ public class Executor {
                         System.arraycopy(command, 1, args, 0, command.length - 1);
 
                         CommandRequest request = new CommandRequest(command[0], args, object);
-                        CommandResponse response = client.run(request);
-                        System.out.println(response.getMessage());
-                        if (response.getObject() != null) {
-                            Object object1 = response.getObject();
-                            if (object1 instanceof Iterable<?>)
-                                for (Object o : (Iterable<?>) object1) System.out.println(o.toString());
-                            else System.out.println(object1.toString());
-                        }
+                        manageResponse(request);
                         //somehow send request to server
                     } else {
                         System.out.println("Wrong command, use help to get list of commands");
@@ -170,14 +163,7 @@ public class Executor {
 
                     CommandRequest request = new CommandRequest(command[0], args, object);
                     status = Status.OK;
-                    CommandResponse response = client.run(request);
-                    System.out.println(response.getMessage());
-                    if (response.getObject() != null) {
-                        Object object1 = response.getObject();
-                        if (object1 instanceof Iterable<?>)
-                            for (Object o : (Iterable<?>) object1) System.out.println(o.toString());
-                        else System.out.println(object1.toString());
-                    }
+                    manageResponse(request);
                     //somehow send request to server
                 }
 
@@ -199,6 +185,17 @@ public class Executor {
         }
 
         return Status.ERROR;
+    }
+
+    private void manageResponse(CommandRequest request) {
+        CommandResponse response = client.run(request);
+        System.out.println(response.getMessage());
+        if (response.getObject() != null) {
+            Object object1 = response.getObject();
+            if (object1 instanceof Iterable<?>)
+                for (Object o : (Iterable<?>) object1) System.out.println(o.toString());
+            else System.out.println(object1.toString());
+        }
     }
 
     /**

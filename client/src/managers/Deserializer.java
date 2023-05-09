@@ -1,4 +1,4 @@
-package collections;
+package managers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
