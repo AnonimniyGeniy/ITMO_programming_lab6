@@ -31,7 +31,3 @@ jar {
         )
     }
 }
-
-test {
-    useJUnitPlatform()
-}

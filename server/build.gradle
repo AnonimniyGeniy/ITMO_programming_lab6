@@ -1,12 +1,14 @@
 plugins {
     id 'java'
     id 'application'
+    id 'idea'
 }
 
 apply plugin : 'java'
 apply plugin : 'application'
+apply plugin : 'idea'
 group = 'org.lab6'
-version = '1.0-SNAPSHOT'
+version = '1.0-dev'
 
 repositories {
     mavenCentral()
@@ -14,15 +16,9 @@ repositories {
 
 sourceSets.main.java.srcDirs = ['src']
 
-/*
-configurations {
-    all {
-        exclude group: 'com.google.code.gson', module: 'gson'
-    }
-}*/
 
 application {
-    mainClass = 'main.Main'
+    mainClassName = 'server.App'
 }
 
 dependencies {
@@ -35,10 +31,8 @@ dependencies {
 
 jar {
     manifest {
-        include ":shared"
-
-        attributes ("Main-Class": "main.Main",
-                    "Class-Path": configurations.compileClasspath.collect { it.getName() }.join(' '))
-
+        attributes("Main-Class": "server.App",
+                "Class-Path": configurations.compileClasspath.collect { it.getName() }.join(' ')
+        )
     }
 }

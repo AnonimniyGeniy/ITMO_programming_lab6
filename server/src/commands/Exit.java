@@ -2,7 +2,6 @@ package commands;
 
 
 import managers.CollectionManager;
-import managers.Console;
 /**
  * Command for exit from program
  *

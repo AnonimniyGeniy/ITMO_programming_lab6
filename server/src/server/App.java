@@ -1,11 +1,10 @@
-package main;
-
+package server;
 
 import managers.CollectionManager;
 import managers.FileManager;
 import server.Server;
 
-public class Main {
+public class App {
     public static void main(String[] args) {
         String path = null;
         try {

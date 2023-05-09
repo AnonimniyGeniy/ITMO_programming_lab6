@@ -1,7 +1,5 @@
 package commands;
 
-
-
 /**
  * Command to execute script from file
  */
