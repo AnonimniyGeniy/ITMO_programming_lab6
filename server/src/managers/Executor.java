@@ -40,17 +40,21 @@ public class Executor {
         commandManager.addCommand(new Help(commandManager.getCommandsArray()));
         this.commandManager = commandManager;
     }
+
+    public AbstractCommand[] getCommandsArray() {
+        return commandManager.getCommandsArray();
+    }
     /**
      * method for executing commands in cli mode
      *
      * @param userCommand - command to execute
-     * @return status of execution
+     * @return response of command execution
      */
     public CommandResponse executeCommand(CommandRequest userCommand) {
         Command command = commandManager.getCommands().get(userCommand.getCommandName());
         CommandResponse response = new CommandResponse("OK", null);
         try {
-            if (userCommand.getArguments().length == 0) {
+            if (userCommand.getElement() == null) {
                 response = command.execute((String[]) userCommand.getArguments(), null);
                 commandManager.addHistory(userCommand.getCommandName());
             } else {
@@ -63,122 +67,6 @@ public class Executor {
         }
         return response;
     }
-//    public Status executeCommand(CommandRequest userCommand){
-//        Command command = commandManager.getCommands().get(userCommand.getCommandName());
-//        try {
-//            /*
-//            if (userCommand[0].equals("exit")) {
-//                return Status.EXIT;
-//            } else if (userCommand[0].equals("execute_script")) {
-//                if (!commandManager.getCommands().get("execute_script").execute(userCommand[1].trim().split(" ")))
-//                    return Status.ERROR;
-//                return scriptMode(userCommand[1]);
-//            }
-//            */
-//
-//            if (userCommand.getArguments().length == 0) {
-//                command.execute((String[]) userCommand.getArguments(), null);
-//                commandManager.addHistory(userCommand.getCommandName());
-//            } else {
-//                command.execute((String[]) userCommand.getArguments(), userCommand.getElement());
-//                commandManager.addHistory(userCommand.getCommandName());
-//            }
-//            return Status.OK;
-//        } catch (Exception e) {
-//            console.println("Error: " + e.getMessage());
-//            return Status.ERROR;
-//        }
-//    }
-
-/**
- * method for executing commands in console mode
- */
-    /*
-    public void consoleMode() {
-        Scanner userScanner = CommandParser.getScanner();
-        try {
-            Status status;
-            String[] command;
-            do {
-                console.print("Enter command: ");
-                status = Status.OK;
-                try {
-                    command = userScanner.nextLine().trim().split(" ", 2);
-                    status = executeCommand(command);
-                } catch (NoSuchElementException e) {
-                    console.println("Ctrl-D pressed, finishing program...");
-                    status = Status.EXIT;
-                }
-
-            } while (status != Status.EXIT);
-        } catch (Exception e) {
-            console.println(e.getMessage());
-        }
-    }
-*/
-    /**
-     * method for executing commands in script mode
-     *
-     * @param arg - argument of command
-     * @return status of execution
-     */
-
-    /*
-    public Status scriptMode(String arg) {
-        String[] command = new String[2];
-        Status status;
-        recursionStack.add(arg);
-        if (!new File(arg).exists()) {
-            arg = "../" + arg;
-        }
-        Scanner defaultScanner = CommandParser.getScanner();
-        try (Scanner scanner = new Scanner(new File(arg))) {
-            if (!scanner.hasNextLine()) {
-                console.println("File is empty");
-                return Status.ERROR;
-            }
-
-            CommandParser.setScanner(scanner);
-            CommandParser.setFileMode();
-            //do while loop for executing commands from file
-            do {
-                command = scanner.nextLine().trim().split(" ", 2);
-                while (scanner.hasNextLine() && command[0].isEmpty()) {
-                    command = scanner.nextLine().trim().split(" ", 2);
-                }
-                console.println("Executing command: " + command[0]);
-
-                if (command[0].equals("execute_script")) {
-                    for (String s : recursionStack) {
-                        if (s.equals(command[1])) throw new RecursionInScriptRecursion();
-                    }
-                }
-                status = executeCommand(command);
-
-
-            } while (status == Status.OK && scanner.hasNextLine());
-
-            CommandParser.setScanner(defaultScanner);
-            CommandParser.setConsoleMode();
-            if (status == Status.ERROR && !(command[0].equals("execute_script")) && !(command[1].isEmpty())) {
-                console.println("Error in file " + arg);
-            }
-            return status;
-
-        } catch (FileNotFoundException e) {
-            console.println("File not found");
-        } catch (RecursionInScriptRecursion e) {
-            console.println("Recursion in script");
-        } finally {
-            CommandParser.setScanner(defaultScanner);
-            CommandParser.setConsoleMode();
-        }
-
-        return Status.ERROR;
-    }
-    */
-
-
     /**
      * enum for status of execution
      */

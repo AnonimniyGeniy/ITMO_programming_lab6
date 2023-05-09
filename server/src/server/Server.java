@@ -1,14 +1,12 @@
 package server;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.ServerSocket;
-;
-import commands.CommandRequest;
-import commands.CommandResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import commands.*;
 import managers.CollectionManager;
 import managers.Executor;
 
@@ -45,11 +43,16 @@ public class Server {
 
 
     }
-
-
     public void run(){
         try{
             connect();
+            //creating array of command-descriptions by using factory for each command in commands array from executor
+            AbstractCommand[] commands = executor.getCommandsArray();
+            CommandDescription[] commandDescriptions = new CommandDescription[commands.length];
+            for (int i = 0; i < commands.length; i++) {
+                commandDescriptions[i] = CommandDescriptionFactory.createCommandDescription(commands[i].getClass());
+            }
+            sendObject(commandDescriptions);
             CommandRequest commandRequest = null;
             while (commandRequest == null){
                 try {
@@ -60,10 +63,21 @@ public class Server {
             }
             CommandResponse result = executor.executeCommand(commandRequest);
             sendObject(result);
-            executor.executeCommand(new CommandRequest("save", new Object[]{}, null));
+            executor.executeCommand(new CommandRequest("save", new String[]{}, null));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+//        try {
+//            if (stream.available() > 0){
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+//                if (reader.readLine().equals("save")){
+//                    executor.executeCommand(new CommandRequest("save", new String[]{}, null));
+//                    System.out.println("Collection saved");
+//                }
+//            }
+//        }catch (Exception e){
+//            System.out.println("Error while saving collection");
+//        }
     }
 
 

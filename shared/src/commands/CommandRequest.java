@@ -9,10 +9,10 @@ import java.io.Serializable;
 
 public class CommandRequest implements Serializable {
     private final String commandName;
-    private final Object[] arguments;
+    private final String[] arguments;
     private final Object object;
 
-    public CommandRequest(String commandName, Object[] arguments, Object object) {
+    public CommandRequest(String commandName, String[] arguments, Object object) {
         this.commandName = commandName;
         this.arguments = arguments;
         this.object = object;
@@ -23,7 +23,7 @@ public class CommandRequest implements Serializable {
         return commandName;
     }
 
-    public Object[] getArguments() {
+    public String[] getArguments() {
         return arguments;
     }
 
