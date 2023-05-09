@@ -5,9 +5,7 @@ import commands.CommandRequest;
 import commands.CommandResponse;
 import interfaces.ClientInterface;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -65,18 +63,21 @@ public class Client implements ClientInterface {
     }
 
     public Object readObject() throws ClassNotFoundException, IOException {
-        while (true) {
-            try {
-                client.read(buffer);
-                Object obj = deserializer.deserialize(buffer);
-                buffer = ByteBuffer.allocate(100000);
-                return obj;
-            } catch (Exception e) {
-                System.out.println("Error while reading object");
-                e.printStackTrace();
-            }
-            return null;
+        //while (true) {
+        try {
+            client.read(buffer);
+            //buffer.flip();
+            ByteArrayInputStream byteStream = new ByteArrayInputStream(buffer.array());
+            ObjectInputStream objectStream = new ObjectInputStream(byteStream);
+            Object object = objectStream.readObject();
+
+            return object;
+        } catch (Exception e) {
+            System.out.println("Error while reading object");
+            e.printStackTrace();
         }
+        return null;
+        //}
     }
 
     public void sendObject(Object obj) throws IOException {

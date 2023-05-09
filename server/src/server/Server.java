@@ -40,7 +40,8 @@ public class Server {
     public void run() {
         try {
             connect();
-            sendObject(new String("Some message"));
+            sendObject("Some message");
+
             //server.close();
             //Object obj = readObject();
 //            String s = (String) obj;
@@ -75,8 +76,14 @@ public class Server {
 
     private void sendObject(Object object) throws IOException {
 
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(baos);
+        objectOutputStream.writeObject(object);
+        //objectOutputStream.flush();
+
         outputStream = new ObjectOutputStream(socket.getOutputStream());
-        outputStream.writeObject(object);
+        byte[] byteArray = baos.toByteArray(); // получаем байтовый массив из буфера
+        outputStream.write(byteArray);
         outputStream.flush();
         //OutputStream os = socket.getOutputStream();
         //os.write(object);
