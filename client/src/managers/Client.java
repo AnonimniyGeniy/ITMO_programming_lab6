@@ -7,6 +7,7 @@ import commands.CommandRequest;
 import commands.CommandResponse;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
@@ -28,7 +29,6 @@ public class Client {
         try {
             connect();
             this.commandDescriptions = (CommandDescription[]) receiveObject();
-            close();
         } catch (Exception e) {
             System.out.println("Error while connecting to server");
         }
@@ -39,6 +39,12 @@ public class Client {
         CommandResponse response = null;
         try {
             connect();
+            //try receiving command descriptions
+            try {
+                this.commandDescriptions = (CommandDescription[]) receiveObject();
+            } catch (Exception e) {
+                System.out.println("Error while receiving command descriptions");
+            }
             sendObject(obj);
             response = (CommandResponse) receiveObject();
             close();
@@ -49,7 +55,7 @@ public class Client {
     }
 
     private void connect() throws IOException {
-        client = SocketChannel.open(new java.net.InetSocketAddress(host, port));
+        client = SocketChannel.open(new InetSocketAddress(host, port));
         client.configureBlocking(false);
 
     }
@@ -65,10 +71,10 @@ public class Client {
     private Object receiveObject() throws IOException {
         while (true) {
             try {
-                buffer.clear();
                 client.read(buffer);
-                buffer.flip();
-                return deserializer.deserialize(buffer);
+                Object o = deserializer.deserialize(buffer);
+                buffer = ByteBuffer.allocate(100000);
+                return o;
             } catch (Exception e) {
                 System.out.println("Error while receiving object");
                 return null;
@@ -84,5 +90,9 @@ public class Client {
         client.close();
     }
 
+    public void receiveCommandDescriptions() throws IOException {
+        connect();
+        this.commandDescriptions = (CommandDescription[]) receiveObject();
+    }
 
 }

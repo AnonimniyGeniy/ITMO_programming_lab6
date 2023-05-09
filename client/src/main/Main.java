@@ -15,7 +15,6 @@ public class Main {
         Console console = new managers.UserConsole();
         CommandParser.setScanner(new Scanner(System.in));
 
-
         int port = PortAsker.askPort();
         Client client = new Client("localhost", port);
         CommandDescription[] commandDescriptions = new CommandDescription[]{};
@@ -23,8 +22,14 @@ public class Main {
             try {
                 port = PortAsker.askPort();
                 client = new Client("localhost", port);
+                client.receiveCommandDescriptions();
                 commandDescriptions = client.getCommandDescriptions();
+                if (commandDescriptions == null) {
+                    commandDescriptions = new CommandDescription[]{};
+                    System.out.println("Server is not responding, trying again...");
+                }
             } catch (Exception e) {
+                System.out.println(e.getMessage());
                 System.out.println("Error while connecting to server, trying again...");
             }
         }

@@ -13,8 +13,6 @@ import managers.Executor;
 /**
  * Class that manages connections with clients
  */
-
-
 public class Server {
     private int port;
     private Socket socket;
@@ -40,8 +38,6 @@ public class Server {
         stream = System.in;
         this.collectionManager = collectionManager;
         this.executor = new Executor(collectionManager);
-
-
     }
     public void run(){
         try{
@@ -52,6 +48,7 @@ public class Server {
             for (int i = 0; i < commands.length; i++) {
                 commandDescriptions[i] = CommandDescriptionFactory.createCommandDescription(commands[i].getClass());
             }
+            System.out.println("Sending command descriptions");
             sendObject(commandDescriptions);
             CommandRequest commandRequest = null;
             while (commandRequest == null){
@@ -65,7 +62,7 @@ public class Server {
             sendObject(result);
             executor.executeCommand(new CommandRequest("save", new String[]{}, null));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("Error while running server");
         }
 //        try {
 //            if (stream.available() > 0){
@@ -96,5 +93,4 @@ public class Server {
         outputStream.writeObject(object);
         outputStream.flush();
     }
-
 }
