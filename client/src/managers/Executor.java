@@ -7,6 +7,7 @@ import collections.WeaponType;
 import collections.askers.*;
 import commands.CommandDescription;
 import commands.CommandRequest;
+import commands.CommandResponse;
 import exceptions.EmptyFieldException;
 import exceptions.IncorrectScriptInputException;
 import exceptions.InvalidObjectException;
@@ -23,6 +24,7 @@ import java.util.Scanner;
 public class Executor {
     private final List<String> recursionStack = new ArrayList<>();
     private final CommandManager commandManager;
+    private Client client;
 
     /**
      * constructor for Executor
@@ -67,6 +69,14 @@ public class Executor {
                         System.arraycopy(command, 1, args, 0, command.length - 1);
 
                         CommandRequest request = new CommandRequest(command[0], args, object);
+                        CommandResponse response = client.run(request);
+                        System.out.println(response.getMessage());
+                        if (response.getObject() != null) {
+                            Object object1 = response.getObject();
+                            if (object1 instanceof Iterable<?>)
+                                for (Object o : (Iterable<?>) object1) System.out.println(o.toString());
+                            else System.out.println(object1.toString());
+                        }
                         //somehow send request to server
                     } else {
                         System.out.println("Wrong command, use help to get list of commands");
@@ -160,6 +170,14 @@ public class Executor {
 
                     CommandRequest request = new CommandRequest(command[0], args, object);
                     status = Status.OK;
+                    CommandResponse response = client.run(request);
+                    System.out.println(response.getMessage());
+                    if (response.getObject() != null) {
+                        Object object1 = response.getObject();
+                        if (object1 instanceof Iterable<?>)
+                            for (Object o : (Iterable<?>) object1) System.out.println(o.toString());
+                        else System.out.println(object1.toString());
+                    }
                     //somehow send request to server
                 }
 
@@ -184,8 +202,19 @@ public class Executor {
     }
 
     /**
+     * method for setting client
+     *
+     * @param client - client
+     */
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    /**
      * enum for status of execution
      */
+
+
     public enum Status {
         OK,
         ERROR,

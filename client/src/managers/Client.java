@@ -2,6 +2,7 @@ package managers;
 
 import collections.Deserializer;
 import collections.Serializer;
+import commands.CommandDescription;
 import commands.CommandRequest;
 import commands.CommandResponse;
 
@@ -16,6 +17,7 @@ public class Client {
     private Serializer serializer;
     private Deserializer deserializer;
     private ByteBuffer buffer;
+    private CommandDescription[] commandDescriptions;
 
     public Client(String host, int port) {
         this.host = host;
@@ -23,6 +25,13 @@ public class Client {
         serializer = new Serializer();
         deserializer = new Deserializer();
         this.buffer = ByteBuffer.allocate(100000);
+        try {
+            connect();
+            this.commandDescriptions = (CommandDescription[]) receiveObject();
+            close();
+        } catch (Exception e) {
+            System.out.println("Error while connecting to server");
+        }
 
     }
 
@@ -65,6 +74,10 @@ public class Client {
                 return null;
             }
         }
+    }
+
+    public CommandDescription[] getCommandDescriptions() {
+        return commandDescriptions;
     }
 
     private void close() throws IOException {
