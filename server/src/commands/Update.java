@@ -3,6 +3,7 @@ package commands;
 
 import collections.HumanBeing;
 import managers.CollectionManager;
+import managers.CommandReceiver;
 
 /**
  * command to update element by id
@@ -11,22 +12,15 @@ import managers.CollectionManager;
         requiredObjectType = HumanBeing.class, argumentTypes = {Integer.class})
 public class Update extends AbstractCommand {
     private final CollectionManager collectionManager;
-
-    public Update(CollectionManager collectionManager) {
+    private final CommandReceiver commandReceiver;
+    public Update(CollectionManager collectionManager, CommandReceiver commandReceiver) {
         super("update", "update element by id");
         this.collectionManager = collectionManager;
+        this.commandReceiver = commandReceiver;
     }
 
     @Override
     public CommandResponse execute(String[] args, Object obj) {
-        int key = Integer.parseInt(args[0]);
-        if (!collectionManager.getHumanBeingCollection().containsKey(key)) {
-            return new CommandResponse("Element with this key doesn't exist.", null);
-        }
-        HumanBeing humanBeing = (HumanBeing) obj;
-        humanBeing.setId(key);
-        collectionManager.removeById(key);
-        collectionManager.insert(key, humanBeing);
-        return new CommandResponse("Element updated successfully.", null);
+        return commandReceiver.update(args, obj);
     }
 }

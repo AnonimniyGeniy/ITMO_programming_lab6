@@ -2,8 +2,8 @@ package commands;
 
 
 import collections.Car;
-import collections.HumanBeing;
 import managers.CollectionManager;
+import managers.CommandReceiver;
 
 /**
  * show all elements whose car field value is greater than the specified one
@@ -12,10 +12,12 @@ import managers.CollectionManager;
         requiredObjectType = Car.class)
 public class CountGreaterThanCar extends AbstractCommand {
     private final CollectionManager collectionManager;
+    private final CommandReceiver commandReceiver;
 
-    public CountGreaterThanCar(CollectionManager collectionManager) {
+    public CountGreaterThanCar(CollectionManager collectionManager, CommandReceiver commandReceiver) {
         super("count_greater_than_car", "show all elements whose car field value is greater than the specified one");
         this.collectionManager = collectionManager;
+        this.commandReceiver = commandReceiver;
     }
 
     /**
@@ -25,12 +27,7 @@ public class CountGreaterThanCar extends AbstractCommand {
      */
     @Override
     public CommandResponse execute(String[] args, Object obj) {
-        int count = 0;
-        Car car = (Car) obj;
-        for (HumanBeing humanBeing : collectionManager.getHumanBeingCollection().values()) {
-            if (humanBeing.getCar().compareTo(car) > 0) count++;
-        }
-        return new CommandResponse("There are " + count + " elements whose car field value is greater than the specified one", null);
+        return commandReceiver.countGreaterThanCar(args, obj);
     }
 
 

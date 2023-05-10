@@ -1,8 +1,8 @@
 package server;
 
 import managers.CollectionManager;
+import managers.CommandReceiver;
 import managers.FileManager;
-import server.Server;
 
 public class App {
     public static void main(String[] args) {
@@ -17,6 +17,7 @@ public class App {
             System.out.println("Environment variable FILENAME is not set");
             System.exit(1);
         }
+        CommandReceiver commandReceiver = new CommandReceiver();
         FileManager fileManager = new FileManager(path);
         CollectionManager collectionManager = new CollectionManager(fileManager);
         try {

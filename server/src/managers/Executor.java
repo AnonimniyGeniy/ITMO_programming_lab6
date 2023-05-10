@@ -12,6 +12,7 @@ import java.util.List;
 public class Executor {
     private final List<String> recursionStack = new ArrayList<>();
     private final CommandManager commandManager;
+    private final CommandReceiver commandReceiver;
     /**
      * constructor for Executor
      *
@@ -39,6 +40,8 @@ public class Executor {
         commandManager.addCommand(new History(commandManager));
         commandManager.addCommand(new Help(commandManager.getCommandsArray()));
         this.commandManager = commandManager;
+        this.commandReceiver = new CommandReceiver(commandManager);
+
     }
 
     public AbstractCommand[] getCommandsArray() {

@@ -2,6 +2,7 @@ package commands;
 
 
 import managers.CollectionManager;
+import managers.CommandReceiver;
 
 /**
  * command for removing element from collection by id
@@ -9,21 +10,15 @@ import managers.CollectionManager;
 @CommandInfo(name = "remove", description = "remove element from collection by id", argsCount = 1, argumentTypes = {int.class}, requiredObjectType = Void.class)
 public class Remove extends AbstractCommand {
     private final CollectionManager collectionManager;
-
-    public Remove(CollectionManager collectionManager) {
+    private final CommandReceiver commandReceiver;
+    public Remove(CollectionManager collectionManager, CommandReceiver commandReceiver) {
         super("remove", "remove element from collection by id");
         this.collectionManager = collectionManager;
+        this.commandReceiver = commandReceiver;
     }
 
     @Override
     public CommandResponse execute(String[] args, Object obj) {
-
-        int id = Integer.parseInt(args[0]);
-        if (collectionManager.removeById(id)) {
-            return new CommandResponse("Element with id " + id + " was removed", null);
-        } else {
-            return new CommandResponse("Element with id " + id + " wasn't found", null);
-        }
-
+        return commandReceiver.remove(args, obj);
     }
 }

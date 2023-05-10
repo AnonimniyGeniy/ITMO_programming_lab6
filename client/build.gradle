@@ -24,6 +24,10 @@ application {
     mainClass = 'main.Main'
 }
 
+run{
+    standardInput= System.in
+}
+
 jar {
     manifest {
         attributes("Main-Class": "main.Main",

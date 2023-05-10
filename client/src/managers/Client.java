@@ -34,10 +34,11 @@ public class Client implements ClientInterface {
     }
 
     public void connect() throws IOException {
+
         try {
 
             client = SocketChannel.open();
-            client.configureBlocking(false);
+            client.configureBlocking(true);
             client.connect(new InetSocketAddress(host, port));
             while (!client.finishConnect()) {
                 continue;
@@ -63,21 +64,23 @@ public class Client implements ClientInterface {
     }
 
     public Object readObject() throws ClassNotFoundException, IOException {
-        //while (true) {
-        try {
-            client.read(buffer);
-            //buffer.flip();
-            ByteArrayInputStream byteStream = new ByteArrayInputStream(buffer.array());
-            ObjectInputStream objectStream = new ObjectInputStream(byteStream);
-            Object object = objectStream.readObject();
+        while (true) {
+            try {
+                int bytesRead = client.read(buffer);
+                //buffer.flip();
 
-            return object;
-        } catch (Exception e) {
-            System.out.println("Error while reading object");
-            e.printStackTrace();
+                ByteArrayInputStream byteStream = new ByteArrayInputStream(buffer.array());
+                ObjectInputStream objectStream = new ObjectInputStream(byteStream);
+
+                Object object = deserializer.deserialize(buffer);
+
+                return object;
+            } catch (Exception e) {
+                System.out.println("Error while reading object");
+                e.printStackTrace();
+            }
+            return null;
         }
-        return null;
-        //}
     }
 
     public void sendObject(Object obj) throws IOException {

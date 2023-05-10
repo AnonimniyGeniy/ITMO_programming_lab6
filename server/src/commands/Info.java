@@ -1,8 +1,7 @@
 package commands;
 
 import managers.CollectionManager;
-
-import java.time.LocalDateTime;
+import managers.CommandReceiver;
 
 /**
  * Command that prints info about collection
@@ -10,10 +9,11 @@ import java.time.LocalDateTime;
 @CommandInfo(name = "info", description = "Prints info about collection")
 public class Info extends AbstractCommand {
     private final CollectionManager collectionManager;
-
-    public Info(CollectionManager collectionManager) {
+    private final CommandReceiver commandReceiver;
+    public Info(CollectionManager collectionManager, CommandReceiver commandReceiver) {
         super("info", "Get info about collection.");
         this.collectionManager = collectionManager;
+        this.commandReceiver = commandReceiver;
     }
 
     @Override
@@ -28,11 +28,6 @@ public class Info extends AbstractCommand {
 
     @Override
     public CommandResponse execute(String[] args, Object obj) {
-        LocalDateTime initTime = collectionManager.getCreationTime();
-        String message = "Collection info:\n" +
-                "Collection type: " + collectionManager.getHumanBeingCollection().getClass().getName() + "\n" +
-                "Collection size: " + collectionManager.getHumanBeingCollection().size() + "\n" +
-                "Initialization time: " + initTime;
-        return new CommandResponse(message, null);
+        return commandReceiver.info(args, obj);
     }
 }

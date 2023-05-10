@@ -2,18 +2,20 @@ package commands;
 
 import collections.HumanBeing;
 import managers.CollectionManager;
+import managers.CommandReceiver;
 
 /**
  * Command that inserts element in the collection
  */
 @CommandInfo(name = "insert", description = "Adds element to the collection by id. Syntax: insert id {element}", argsCount = 1, requiredObjectType = HumanBeing.class, argumentTypes = {Integer.class})
 public class Insert extends AbstractCommand {
-
+    private final CommandReceiver commandReceiver;
     private final CollectionManager collectionManager;
 
-    public Insert(CollectionManager collectionManager) {
+    public Insert(CollectionManager collectionManager, CommandReceiver commandReceiver) {
         super("Insert", "Add element to the collection by id. Syntax: insert id {element}");
         this.collectionManager = collectionManager;
+        this.commandReceiver = commandReceiver;
     }
 
     @Override
@@ -28,16 +30,7 @@ public class Insert extends AbstractCommand {
 
     @Override
     public CommandResponse execute(String[] args, Object obj) {
-        //console.println(args[0] + args[1]);
-        int key = Integer.parseInt(args[0]);
-        if (collectionManager.getHumanBeingCollection().containsKey(key)) {
-            return new CommandResponse("Element with this key already exists.", null);
-        }
-        HumanBeing humanBeing = null;
-        humanBeing = (HumanBeing) obj;
-        humanBeing.setId(key);
-        collectionManager.insert(key, humanBeing);
-        return new CommandResponse("Element added successfully.", null);
+        return commandReceiver.insert(args, obj);
 
     }
 

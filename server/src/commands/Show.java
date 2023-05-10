@@ -1,6 +1,7 @@
 package commands;
 
 import managers.CollectionManager;
+import managers.CommandReceiver;
 
 /**
  * Show command
@@ -9,15 +10,16 @@ import managers.CollectionManager;
 @CommandInfo(name = "show", description = "Show all elements of collection")
 public class Show extends AbstractCommand {
     final CollectionManager collectionManager;
-
-    public Show(CollectionManager collectionManager) {
+    private final CommandReceiver commandReceiver;
+    public Show(CollectionManager collectionManager, CommandReceiver commandReceiver) {
         super("show", "Show all elements of collection");
         this.collectionManager = collectionManager;
+        this.commandReceiver = commandReceiver;
     }
 
     @Override
     public CommandResponse execute(String[] args, Object obj) {
-        return new CommandResponse("Showed all elements of collection", collectionManager.getArray());
+        return commandReceiver.show(args, obj);
     }
 
 }
