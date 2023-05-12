@@ -9,18 +9,17 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class CommandReceiver {
-    private final CommandManager commandManager;
     private final CollectionManager collectionManager;
 
-    public CommandReceiver(CommandManager commandManager, CollectionManager collectionManager) {
-        this.commandManager = commandManager;
+    public CommandReceiver(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
 
 
     public CommandResponse help(String[] args, Object obj) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (AbstractCommand command : commandManager.getCommandsArray()) {
+        AbstractCommand[] commands = (AbstractCommand[]) obj;
+        for (AbstractCommand command : commands) {
             stringBuilder.append(command.getName()).append(" - ").append(command.describe()).append("\n");
         }
         stringBuilder.append("help - ").append("shows help for available commands");
@@ -155,6 +154,7 @@ public class CommandReceiver {
     public CommandResponse history(String[] args, Object obj) {
         StringBuilder commands = new StringBuilder();
         String message = "Last 13 commands:";
+        CommandManager commandManager = (CommandManager) obj;
         for (String command : commandManager.getCommandHistory()) {
             commands.append(command).append("\n");
         }

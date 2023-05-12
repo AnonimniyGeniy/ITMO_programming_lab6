@@ -12,7 +12,7 @@ import java.util.List;
 public class Executor {
     private final List<String> recursionStack = new ArrayList<>();
     private final CommandManager commandManager;
-    private final CommandReceiver commandReceiver;
+    private CommandReceiver commandReceiver;
     /**
      * constructor for Executor
      *
@@ -22,25 +22,27 @@ public class Executor {
      */
     public Executor(CollectionManager collectionManager) {
         List<AbstractCommand> commands = new ArrayList<>();
-        commands.add(new Info(collectionManager));
-        commands.add(new Insert(collectionManager));
+        commandReceiver = new CommandReceiver(collectionManager);
+        commands.add(new Info(collectionManager,commandReceiver));
+        commands.add(new Insert(collectionManager,commandReceiver));
         //commands.add(new Exit(collectionManager));
-        commands.add(new Save(collectionManager));
-        commands.add(new Show(collectionManager));
-        commands.add(new Remove(collectionManager));
-        commands.add(new Update(collectionManager));
-        commands.add(new Clear(collectionManager));
-        commands.add(new RemoveGreater(collectionManager));
-        commands.add(new ReplaceIfLower(collectionManager));
-        commands.add(new GroupCountingByImpact(collectionManager));
-        commands.add(new CountGreaterThanCar(collectionManager));
-        commands.add(new PrintDescending(collectionManager));
+        commands.add(new Save(collectionManager,commandReceiver));
+        commands.add(new Show(collectionManager,commandReceiver));
+        commands.add(new Remove(collectionManager,commandReceiver));
+        commands.add(new Update(collectionManager,commandReceiver));
+        commands.add(new Clear(collectionManager,commandReceiver));
+        commands.add(new RemoveGreater(collectionManager,commandReceiver));
+        commands.add(new ReplaceIfLower(collectionManager,commandReceiver));
+        commands.add(new GroupCountingByImpact(collectionManager,commandReceiver));
+        commands.add(new CountGreaterThanCar(collectionManager,commandReceiver));
+        commands.add(new PrintDescending(collectionManager,commandReceiver));
         //commands.add(new ExecuteScript);
         var commandManager = new CommandManager(commands);
-        commandManager.addCommand(new History(commandManager));
-        commandManager.addCommand(new Help(commandManager.getCommandsArray()));
+        commandManager.addCommand(new History(commandManager,commandReceiver));
+        commandManager.addCommand(new Help(commandManager.getCommandsArray(),commandReceiver));
+
         this.commandManager = commandManager;
-        this.commandReceiver = new CommandReceiver(commandManager);
+        this.commandReceiver = new CommandReceiver(collectionManager);
 
     }
 

@@ -3,7 +3,7 @@ package commands;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandDescriptionFactory {
+public class    CommandDescriptionFactory {
 
     public static CommandDescription createCommandDescription(Class<? extends AbstractCommand> commandClass) {
         CommandInfo commandInfo = commandClass.getAnnotation(CommandInfo.class);
@@ -17,7 +17,7 @@ public class CommandDescriptionFactory {
         Class<?>[] argumentTypes = commandInfo.argumentTypes();
         Class<?> requiredObjectType = commandInfo.requiredObjectType();
 
-        List<Class<?>> argumentTypeList = new ArrayList<>();
+        ArrayList<Class<?>> argumentTypeList = new ArrayList<>();
         for (Class<?> argumentType : argumentTypes) {
             argumentTypeList.add(argumentType);
         }

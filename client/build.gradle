@@ -1,10 +1,12 @@
 plugins {
     id 'java'
     id 'application'
+    id 'idea'
 }
 
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'idea'
 group = 'org.lab6'
 version = '1.0-SNAPSHOT'
 

@@ -1,6 +1,7 @@
 package commands;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,10 +13,10 @@ public class CommandDescription implements Serializable {
     private final String name;
     private final String description;
     private final int argsCount;
-    private final List<Class<?>> argumentTypes;
+    private final ArrayList<Class<?>> argumentTypes;
     private final Class<?> requiredObjectType;
 
-    public CommandDescription(String name, String description, int argumentCount, List<Class<?>> argumentTypes, Class<?> requiredObjectType) {
+    public CommandDescription(String name, String description, int argumentCount, ArrayList<Class<?>> argumentTypes, Class<?> requiredObjectType) {
         this.name = name;
         this.description = description;
         this.argsCount = argumentCount;
@@ -42,5 +43,6 @@ public class CommandDescription implements Serializable {
     public Class<?> getRequiredObjectType() {
         return requiredObjectType;
     }
+
 
 }

@@ -8,6 +8,7 @@ import interfaces.ClientInterface;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
@@ -37,21 +38,10 @@ public class Client implements ClientInterface {
 
         try {
 
-            client = SocketChannel.open();
-            client.configureBlocking(true);
-            client.connect(new InetSocketAddress(host, port));
-            while (!client.finishConnect()) {
-                continue;
-                // Дополнительные действия или ожидание
-            }
-
-
-            //socket = new Socket(host, port);
-
-            //outputStream = socket.getOutputStream();
-            //inputStream = socket.getInputStream();
-            //System.out.println("Connected to server");
-
+            client = SocketChannel.open(new InetSocketAddress(host, port));
+            client.setOption(StandardSocketOptions.SO_RCVBUF, 1000000);
+            client.setOption(StandardSocketOptions.SO_SNDBUF, 1000000);
+            client.configureBlocking(false);
         } catch (IOException e) {
             System.out.println("Error while connecting to server");
             e.printStackTrace();
@@ -63,29 +53,12 @@ public class Client implements ClientInterface {
         return null;
     }
 
-    public Object readObject() throws ClassNotFoundException, IOException {
-        while (true) {
-            try {
-                int bytesRead = client.read(buffer);
-                //buffer.flip();
 
-                ByteArrayInputStream byteStream = new ByteArrayInputStream(buffer.array());
-                ObjectInputStream objectStream = new ObjectInputStream(byteStream);
-
-                Object object = deserializer.deserialize(buffer);
-
-                return object;
-            } catch (Exception e) {
-                System.out.println("Error while reading object");
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
 
     public void sendObject(Object obj) throws IOException {
         try {
             client.write(serializer.serialize(obj));
+
         } catch (IOException e) {
             System.out.println("Error while sending object");
             e.printStackTrace();

@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class CommandResponse implements Serializable {
     private final String message;
-    private final Object[] object;
+    private final Object object;
 
-    public CommandResponse(String message, Object[] object) {
+    public CommandResponse(String message, Object object) {
         this.message = message;
         this.object = object;
     }
