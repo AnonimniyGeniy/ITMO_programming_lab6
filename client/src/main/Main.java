@@ -3,6 +3,7 @@ package main;
 
 import collections.askers.PortAsker;
 import commands.CommandDescription;
+import commands.CommandRequest;
 import commands.CommandResponse;
 import managers.*;
 
@@ -18,31 +19,33 @@ public class Main {
 
         int port = PortAsker.askPort();
         Client client = new Client("localhost", port);
-        //CommandDescription[] commandDescriptions = new CommandDescription[]{
-        //        new CommandDescription("help", "вывести справку по доступным командам", 0, new ArrayList<>() {}, Void.class),
-        //};
-        client.connect();
+
+        CommandRequest request = new CommandRequest("connect", new String[]{}, null);
+        CommandResponse commandResponse = client.run(request);
+
+        ArrayList<CommandDescription> commandDescriptions = (ArrayList<CommandDescription>) commandResponse.getObject();
+        CommandDescription[] commandsArray = new CommandDescription[commandDescriptions.size() - 1];
+        for(int i = 0; i < commandDescriptions.size(); i++) {
+            if (commandDescriptions.get(i).getName().equals("connect")){
+                commandDescriptions.remove(i);
+                break;
+            }
+        }
+        for (int i = 0; i < commandDescriptions.size(); i++) {
+            commandsArray[i] = commandDescriptions.get(i);
+        }
+        CommandManager commandManager = new CommandManager(commandsArray);
+        Executor executor = new Executor(commandManager, console, client);
+
+        executor.consoleMode();
+
+        //client.connect();
 
         //client.sendObject("123123123");
-        CommandResponse response = new CommandResponse("123123123", null);
-        CommandDescription commandDescription = new CommandDescription("help", "вывести справку по доступным командам", 0, new ArrayList<>() {}, Void.class);
-        client.sendObject(commandDescription);
+        //CommandResponse response = new CommandResponse("123123123", null);
 
-        client.close();
+        //client.close();
 
-        //serialize and deserialize object to send
-//        Serializer serializer = new Serializer();
-//        Deserializer deserializer = new Deserializer();
-//        ByteBuffer buffer = serializer.serialize(response);
-//        ByteBuffer buffer1 = serializer.serialize(commandDescription);
-//        try {
-//            CommandResponse response1 = (CommandResponse) deserializer.deserialize(buffer);
-//            CommandDescription commandDescription1 = (CommandDescription) deserializer.deserialize(buffer1);
-//            System.out.println(response1.getMessage());
-//            System.out.println(commandDescription1.getDescription());
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
         //CommandManager commandManager = new CommandManager(commandDescriptions);
         //managers.Executor executor = new managers.Executor(commandManager, console);
         //executor.setClient(client);

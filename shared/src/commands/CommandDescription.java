@@ -2,7 +2,9 @@ package commands;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -44,5 +46,14 @@ public class CommandDescription implements Serializable {
         return requiredObjectType;
     }
 
+    @Override
+    public String toString() {
+        List<Class<?>> classList = Arrays.asList(String.class, Integer.class, Boolean.class);
 
+        String concatenatedNames = classList.stream()
+                .map(Class::getName)
+                .collect(Collectors.joining(", "));
+
+        return name + " : " + description;
+    }
 }

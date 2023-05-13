@@ -20,7 +20,6 @@ public class Serializer {
             objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             objectOutputStream.writeObject(object);
             objectOutputStream.flush();
-            objectOutputStream.close();
             return ByteBuffer.wrap(byteArrayOutputStream.toByteArray());
         } catch (Exception e) {
             e.printStackTrace();

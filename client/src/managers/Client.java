@@ -5,10 +5,10 @@ import commands.CommandRequest;
 import commands.CommandResponse;
 import interfaces.ClientInterface;
 
-import java.io.*;
-import java.net.InetSocketAddress;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
@@ -32,41 +32,41 @@ public class Client implements ClientInterface {
         deserializer = new Deserializer();
 
         this.buffer = ByteBuffer.allocate(100000);
-    }
-
-    public void connect() throws IOException {
-
         try {
+            while (true) {
+                try {
+                    client = SocketChannel.open();
+                    client.connect(new java.net.InetSocketAddress("localhost", port));
+                    break;
+                } catch (IOException e) {
+                    System.out.println("Reconnecting to Server");
+                    Thread.sleep(1000);
+                }
 
-            client = SocketChannel.open(new InetSocketAddress(host, port));
-            client.setOption(StandardSocketOptions.SO_RCVBUF, 1000000);
-            client.setOption(StandardSocketOptions.SO_SNDBUF, 1000000);
-            client.configureBlocking(false);
-        } catch (IOException e) {
-            System.out.println("Error while connecting to server");
+            }
+
+        } catch (InterruptedException e) {
             e.printStackTrace();
+
         }
     }
+
 
     @Override
-    public CommandResponse run(CommandRequest obj) {
-        return null;
-    }
-
-
-
-    public void sendObject(Object obj) throws IOException {
+    public CommandResponse run(CommandRequest request) {
         try {
-            client.write(serializer.serialize(obj));
-
-        } catch (IOException e) {
-            System.out.println("Error while sending object");
+            ByteBuffer response = ByteBuffer.allocate(1000000);
+            buffer = serializer.serialize(request);
+            client.write(buffer);
+            response.clear();
+            client.read(response);
+            //byte[] bytes = response.array();
+            CommandResponse response1 = (CommandResponse) deserializer.deserialize(response);
+            return response1;
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return new CommandResponse("Something went wrong", null);
     }
 
-    public void close() throws IOException {
-        //socket.close();
-        client.close();
-    }
 }

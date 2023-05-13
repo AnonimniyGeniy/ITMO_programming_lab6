@@ -26,10 +26,8 @@ public class App {
         }
 
         Server server = new Server(collectionManager);
-        //while (true) {
-        server.run();
 
-        //}
+        server.run();
 
     }
 }

@@ -3,6 +3,8 @@ package managers;
 import collections.Car;
 import collections.HumanBeing;
 import commands.AbstractCommand;
+import commands.CommandDescription;
+import commands.CommandDescriptionFactory;
 import commands.CommandResponse;
 
 import java.time.LocalDateTime;
@@ -159,5 +161,15 @@ public class CommandReceiver {
             commands.append(command).append("\n");
         }
         return new CommandResponse(message, new Object[]{commands.toString()});
+    }
+
+    public CommandResponse connect(String[] args, Object obj) {
+        CommandManager commandManager = (CommandManager) obj;
+        AbstractCommand[] commands = commandManager.getCommandsArray();
+        ArrayList<CommandDescription> commandDescriptions = new ArrayList<>();
+        for (AbstractCommand command : commands) {
+            commandDescriptions.add(CommandDescriptionFactory.createCommandDescription(command.getClass()));
+        }
+        return new CommandResponse("Got commands", commandDescriptions);
     }
 }

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import static java.lang.Integer.parseInt;
+
 
 public class Executor {
     private final List<String> recursionStack = new ArrayList<>();
@@ -32,13 +34,14 @@ public class Executor {
      * @param commandManager - CommandManager
      *                       for managing commands
      */
-    public Executor(CommandManager commandManager, Console console) {
+    public Executor(CommandManager commandManager, Console console, Client client) {
 
         AskerManager.setAsker(Car.class, new CarAsker(console));
         AskerManager.setAsker(Coordinates.class, new CoordinatesAsker(console));
         AskerManager.setAsker(HumanBeing.class, new HumanBeingAsker(console));
         AskerManager.setAsker(WeaponType.class, new WeaponTypeAsker(console));
         this.commandManager = commandManager;
+        this.client = client;
     }
 
     public void consoleMode() {
@@ -70,7 +73,7 @@ public class Executor {
 
                         CommandRequest request = new CommandRequest(command[0], args, object);
                         manageResponse(request);
-                        //somehow send request to server
+                        client.run(request);
                     } else {
                         System.out.println("Wrong command, use help to get list of commands");
                     }
@@ -103,8 +106,8 @@ public class Executor {
             for (int i = 1; i < command.length; i++) {
                 //check that ith argument can be cast to class of ith argument in commandDescription
                 try {
-                    description.getArgumentTypes().get(i - 1).cast(command[i]);
-                } catch (ClassCastException e) {
+                    parseInt(command[i]);
+                } catch (NumberFormatException e) {
                     System.out.println("Wrong type of argument");
                     return false;
                 }

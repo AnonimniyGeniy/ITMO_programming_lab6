@@ -10,6 +10,7 @@ public class Deserializer {
         return new Deserializer();
     }
 
+    //public Object deserialize(ByteBuffer byteBuffer) throws IOException, ClassNotFoundException {
     public Object deserialize(ByteBuffer byteBuffer) throws IOException, ClassNotFoundException {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteBuffer.array());
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);

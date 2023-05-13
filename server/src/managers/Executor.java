@@ -40,7 +40,7 @@ public class Executor {
         var commandManager = new CommandManager(commands);
         commandManager.addCommand(new History(commandManager,commandReceiver));
         commandManager.addCommand(new Help(commandManager.getCommandsArray(),commandReceiver));
-
+        commandManager.addCommand(new Connect(commandManager,commandReceiver));
         this.commandManager = commandManager;
         this.commandReceiver = new CommandReceiver(collectionManager);
 
