@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Executor {
     private final List<String> recursionStack = new ArrayList<>();
-    private final CommandManager commandManager;
+    private CommandManager commandManager;
     private CommandReceiver commandReceiver;
     /**
      * constructor for Executor
@@ -37,11 +37,10 @@ public class Executor {
         commands.add(new CountGreaterThanCar(collectionManager,commandReceiver));
         commands.add(new PrintDescending(collectionManager,commandReceiver));
         //commands.add(new ExecuteScript);
-        var commandManager = new CommandManager(commands);
+        this.commandManager = new CommandManager(commands);
         commandManager.addCommand(new History(commandManager,commandReceiver));
         commandManager.addCommand(new Help(commandManager.getCommandsArray(),commandReceiver));
         commandManager.addCommand(new Connect(commandManager,commandReceiver));
-        this.commandManager = commandManager;
         this.commandReceiver = new CommandReceiver(collectionManager);
 
     }
@@ -60,12 +59,21 @@ public class Executor {
         CommandResponse response = new CommandResponse("OK", null);
         try {
             if (userCommand.getElement() == null) {
-                response = command.execute((String[]) userCommand.getArguments(), null);
-                commandManager.addHistory(userCommand.getCommandName());
+                //if history command give it command manager
+                if (userCommand.getCommandName().equals("history")) {
+                    response = command.execute((String[]) userCommand.getArguments(), commandManager);
+                    commandManager.addHistory(userCommand.getCommandName());
+                } else {
+                    response = command.execute((String[]) userCommand.getArguments(), null);
+                    commandManager.addHistory(userCommand.getCommandName());
+                }
+
             } else {
                 response = command.execute((String[]) userCommand.getArguments(), userCommand.getElement());
                 commandManager.addHistory(userCommand.getCommandName());
             }
+            Command save = commandManager.getCommands().get("save");
+            save.execute(new String[]{}, null);
             return response;
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

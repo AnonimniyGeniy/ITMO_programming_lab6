@@ -38,7 +38,6 @@ public class FileManager {
     public void writeCollection(TreeMap<Integer, HumanBeing> collection) {
         try (PrintWriter writer = new PrintWriter(new File(path))) {
             writer.println(gson.toJson(collection));
-            System.out.println("Collection saved to file");
         } catch (IOException e) {
             System.out.println("Error during opening file: " + e.getMessage());
         }

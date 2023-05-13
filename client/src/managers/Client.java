@@ -64,7 +64,7 @@ public class Client implements ClientInterface {
             CommandResponse response1 = (CommandResponse) deserializer.deserialize(response);
             return response1;
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Server is not available");
         }
         return new CommandResponse("Something went wrong", null);
     }

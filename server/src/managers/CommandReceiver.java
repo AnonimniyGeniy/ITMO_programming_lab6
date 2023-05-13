@@ -22,7 +22,10 @@ public class CommandReceiver {
         StringBuilder stringBuilder = new StringBuilder();
         AbstractCommand[] commands = (AbstractCommand[]) obj;
         for (AbstractCommand command : commands) {
-            stringBuilder.append(command.getName()).append(" - ").append(command.describe()).append("\n");
+            if (!command.getName().equals("save")) {
+                stringBuilder.append(command.getName()).append(" - ").append(command.describe()).append("\n");
+            }
+            //stringBuilder.append(command.getName()).append(" - ").append(command.describe()).append("\n");
         }
         stringBuilder.append("help - ").append("shows help for available commands");
         return new CommandResponse(stringBuilder.toString(), null);
@@ -82,7 +85,7 @@ public class CommandReceiver {
         try {
             ArrayList<HumanBeing> elements = new ArrayList<>(List.of(collectionManager.getArray()));
             elements.sort(Comparator.reverseOrder());
-            return new CommandResponse("Elements in descending order", elements.toArray());
+            return new CommandResponse("Elements in descending order", elements);
 
         } catch (Exception e) {
             return new CommandResponse("Something went wrong", null);
@@ -139,17 +142,24 @@ public class CommandReceiver {
 
         for (int j : impactSpeed) {
             if (counter.containsKey(j)) {
-                counter.put(j, counter.get(j) + 1);
+                counter.replace(j, counter.get(j) + 1);
             } else {
                 counter.put(j, 1);
             }
         }
-        String[] objects = new String[counter.size()];
+        StringBuilder stringBuilder = new StringBuilder();
 
         for (Map.Entry<Integer, Integer> entry : counter.entrySet()) {
-            objects[entry.getKey()] = "Impact speed: " + entry.getKey() + " - " + entry.getValue() + " elements";
+            stringBuilder.append("Impact speed: ")
+                    .append(entry.getKey())
+                    .append(" - ")
+                    .append(entry.getValue())
+                    .append(" elements")
+                    .append(System.lineSeparator());
         }
-        return new CommandResponse("Grouped counting by impact speed entries", objects);
+
+        String result = stringBuilder.toString();
+        return new CommandResponse("Grouped counting by impact speed entries", result);
 
 
     }
@@ -161,7 +171,7 @@ public class CommandReceiver {
         for (String command : commandManager.getCommandHistory()) {
             commands.append(command).append("\n");
         }
-        return new CommandResponse(message, new Object[]{commands.toString()});
+        return new CommandResponse(message, commands.toString());
     }
 
     public CommandResponse connect(String[] args, Object obj) {
@@ -169,7 +179,9 @@ public class CommandReceiver {
         AbstractCommand[] commands = commandManager.getCommandsArray();
         ArrayList<CommandDescription> commandDescriptions = new ArrayList<>();
         for (AbstractCommand command : commands) {
-            commandDescriptions.add(CommandDescriptionFactory.createCommandDescription(command.getClass()));
+            if (!command.getName().equals("save")) {
+                commandDescriptions.add(CommandDescriptionFactory.createCommandDescription(command.getClass()));
+            }
         }
         return new CommandResponse("Got commands", commandDescriptions);
     }
