@@ -56,9 +56,9 @@ public class Client implements ClientInterface {
     public CommandResponse run(CommandRequest request) {
         try {
             ByteBuffer response = ByteBuffer.allocate(1000000);
+            response.clear();
             buffer = serializer.serialize(request);
             client.write(buffer);
-            response.clear();
             client.read(response);
             //byte[] bytes = response.array();
             CommandResponse response1 = (CommandResponse) deserializer.deserialize(response);

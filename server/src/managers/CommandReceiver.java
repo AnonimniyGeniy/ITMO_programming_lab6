@@ -111,7 +111,8 @@ public class CommandReceiver {
     }
 
     public CommandResponse show(String[] args, Object obj) {
-        return new CommandResponse("Showed all elements of collection", collectionManager.getArray());
+        ArrayList<HumanBeing> coll = new ArrayList<>(List.of(collectionManager.getArray()));
+        return new CommandResponse("Showed all elements of collection", coll);
     }
 
     public CommandResponse clear(String[] args, Object object) {

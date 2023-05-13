@@ -202,15 +202,6 @@ public class Executor {
     }
 
     /**
-     * method for setting client
-     *
-     * @param client - client
-     */
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    /**
      * enum for status of execution
      */
 

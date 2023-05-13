@@ -69,7 +69,7 @@ public class Server {
                     } else if (key.isReadable()) {
                         handleRead(key, selector);
                     } else if (key.isWritable()) {
-                        handleWrite(key);
+                        //handleWrite(key);
                         key.channel().register(selector, SelectionKey.OP_READ);
                     }
                     selector.selectedKeys().remove(key);
@@ -103,6 +103,7 @@ public class Server {
                 return;
             }
             byte[] data = buffer.array();
+            buffer.clear();
             Object receivedObject = deserialize(data);
             // Обработка
             CommandResponse response = new CommandResponse("Command not found", null);
