@@ -69,6 +69,24 @@
       "name": "123123"
     }
   },
+  "5": {
+    "id": 5,
+    "name": "vova",
+    "coordinates": {
+      "x": 12.0,
+      "y": 21
+    },
+    "creationDate": "May 13, 2023, 4:25:18 PM",
+    "realHero": true,
+    "hasToothpick": true,
+    "impactSpeed": 1.2345787E35,
+    "soundtrackName": "1",
+    "minutesOfWaiting": 5.0,
+    "weaponType": "AXE",
+    "car": {
+      "name": "123"
+    }
+  },
   "6": {
     "id": 6,
     "name": "1",
