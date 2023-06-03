@@ -25,6 +25,7 @@ public class App {
             System.exit(1);
         }
 
+
         Server server = new Server(collectionManager);
 
         server.run();
